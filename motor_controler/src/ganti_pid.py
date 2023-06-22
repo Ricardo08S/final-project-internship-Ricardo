@@ -6,12 +6,12 @@ import sys
 import rospy
 from motor_controler.srv import *
 
-def set_ganti_PID(p, i, d, setpoint):
+def ganti_PID(p, i, d, setpoint):
     rospy.wait_for_service('set_pid')
     try:
         set_PID = rospy.ServiceProxy('set_pid', PID)
-        resp1 = set_PID(p, i, d, setpoint)
-        return resp1.sum
+        resp2 = set_PID(p, i, d, setpoint)
+        return resp2.sum
     except rospy.ServiceException as e:
         print("Service call failed: %s"%e)
 
@@ -27,5 +27,6 @@ if __name__ == "__main__":
     else:
         print(usage())
         sys.exit(1)
-    print("Requesting P[%.2f], I[%.2f], D[%.2f], set point[%.2f]"%(p, i, d, setpoint))
-    print("Calculation output = %.2f"%(set_ganti_PID(p, i, d, setpoint)))
+    
+    print("P[%.2f], I[%.2f], D[%.2f], set point[%.2f]"%(p, i, d, setpoint))
+    print("Calculation output = %.2f"%(ganti_PID(p, i, d, setpoint)))

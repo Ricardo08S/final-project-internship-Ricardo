@@ -28,5 +28,6 @@ if __name__ == "__main__":
     else:
         print(usage())
         sys.exit(1)
-    print("Requesting P[%.2f], I[%.2f], D[%.2f], set point[%.2f]"%(p, i, d, setpoint))
+
+    print("P[%.2f], I[%.2f], D[%.2f], set point[%.2f]"%(p, i, d, setpoint))
     print("Calculation output = %.2f"%(set_awal_PID(p, i, d, setpoint)))

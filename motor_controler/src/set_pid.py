@@ -102,14 +102,15 @@ class PIDs:
 
 pid = PIDs(0.0, 0.0, 0.0, 0)
 
-
 def settle_PID(req):
     pid.setP(req.p)
     pid.setI(req.i)
     pid.setD(req.d)
     pid.setTarget(req.s)
-    print("Returning set P[%.2f], I[%.2f], D[%.2f], set point[%.2f]" %(req.p, req.i, req.d, req.s))
-    return PIDResponse(pid.calculation())
+    print("P[%.2f], I[%.2f], D[%.2f], set point[%.2f]" %(req.p, req.i, req.d, req.s))
+    sp_c = pid.calculation()
+    print("Output: %.2f" %(sp_c))
+    return PIDResponse(sp_c)
 
 def set_pid_server():
     rospy.init_node('set_pid_server')
