@@ -6,6 +6,7 @@
         "limitSymbolsToIncludedHeaders": false
       },
       "includePath": [
+        "/home/ricardo/mbarun_ws/devel/include/**",
         "/opt/ros/noetic/include/**",
         "/usr/include/**"
       ],
