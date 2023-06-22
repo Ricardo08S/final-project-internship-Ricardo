@@ -93,7 +93,7 @@ def jalankan(input):
             send_motor_data(water_pump())
         receive_motor_data()
         
-        rate.sleep()
+        rate.sleep()    
 
 
 if __name__ == '__main__':
