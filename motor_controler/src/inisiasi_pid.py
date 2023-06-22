@@ -21,12 +21,12 @@ def usage():
 
 if __name__ == "__main__":
     if len(sys.argv) == 5:
-        p = int(sys.argv[1])
-        i = int(sys.argv[2])
-        d = int(sys.argv[3])
-        setpoint = int(sys.argv[4])
+        p = float(sys.argv[1])
+        i = float(sys.argv[2])
+        d = float(sys.argv[3])
+        setpoint = float(sys.argv[4])
     else:
         print(usage())
         sys.exit(1)
-    print("Requesting P[%s], I[%s], D[%s], set point[%s]"%(p, i, d, setpoint))
-    print("Calculation output = %s"%(set_awal_PID(p, i, d, setpoint)))
+    print("Requesting P[%.2f], I[%.2f], D[%.2f], set point[%.2f]"%(p, i, d, setpoint))
+    print("Calculation output = %.2f"%(set_awal_PID(p, i, d, setpoint)))

@@ -108,12 +108,12 @@ def settle_PID(req):
     pid.setI(req.i)
     pid.setD(req.d)
     pid.setTarget(req.s)
-    print("Returning set P[%s], I[%s], D[%s], set point[%s]"%(req.p, req.i, req.d, req.s))
+    print("Returning set P[%.2f], I[%.2f], D[%.2f], set point[%.2f]" %(req.p, req.i, req.d, req.s))
     return PIDResponse(pid.calculation())
 
 def set_pid_server():
     rospy.init_node('set_pid_server')
-    s = rospy.Service('set_pid', PID, settle_PID)
+    rospy.Service('set_pid', PID, settle_PID)
     print("Ready to set PID.")
     rospy.spin()
 

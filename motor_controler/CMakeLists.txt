@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
   message_runtime
   rospy
+  mavros_msgs
   std_msgs
 )
 
@@ -105,7 +106,7 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES motor_controler
-#  CATKIN_DEPENDS message_generation message_runtime rospy std_msgs
+#  CATKIN_DEPENDS message_generation message_runtime rospy std_msgs mavros_msgs
 #  DEPENDS system_lib
 )
 

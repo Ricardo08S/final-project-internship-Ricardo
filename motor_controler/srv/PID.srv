@@ -1,6 +1,6 @@
-int64 p
-int64 i
-int64 d
-int64 s
+float64 p
+float64 i
+float64 d
+float64 s
 ---
-int64 sum
+float64 sum
