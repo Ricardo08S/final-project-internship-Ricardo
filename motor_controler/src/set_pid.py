@@ -3,6 +3,7 @@
 from __future__ import print_function
 
 from motor_controler.srv import PID, PIDResponse
+from motor_controler.srv import feedback
 import rospy
 
 class PIDs:
@@ -112,9 +113,24 @@ def settle_PID(req):
     print("Output: %.2f" %(sp_c))
     return PIDResponse(sp_c)
 
+def get_feedback(req):
+    p_x = req.p_x
+    p_y = req.p_y
+    p_z = req.p_z
+    o_x = req.o_x
+    o_y = req.o_y
+    o_z = req.o_z
+    o_w = req.o_w
+
+    print("Position: x={}, y={}, z={}".format(p_x, p_y, p_z))
+    print("Orientation: x={}, y={}, z={}, w={}".format(o_x, o_y, o_z, o_w))
+    
+
+
 def set_pid_server():
     rospy.init_node('set_pid_server')
     rospy.Service('set_pid', PID, settle_PID)
+    rospy.Service('get_feedback', feedback, get_feedback)
     print("Ready to set PID.")
     rospy.spin()
 

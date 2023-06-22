@@ -1,0 +1,7 @@
+float32 p_x
+float32 p_y
+float32 p_z
+float32 o_x
+float32 o_y
+float32 o_z
+float32 o_w

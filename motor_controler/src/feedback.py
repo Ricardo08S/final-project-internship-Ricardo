@@ -38,14 +38,15 @@ def odometry_callback(data):
 	orientation_z = data.pose.pose.orientation.z
 	orientation_w = data.pose.pose.orientation.w
 	
-	# rospy.wait_for_service('get_feedback')
-	# try:
-	# 	get_feedback = rospy.ServiceProxy('get_feedback', feedback)
-
-	# except rospy.ServiceException as e:
-	#     print("Service call failed: %s"%e)
-	print("Position: x={}, y={}, z={}".format(position_x, position_y, position_z))
-	print("Orientation: x={}, y={}, z={}, w={}".format(orientation_x, orientation_y, orientation_z, orientation_w))
+	rospy.wait_for_service('get_feedback')
+	try:
+		get_feedback = rospy.ServiceProxy('get_feedback', feedback)
+		resp = get_feedback(position_x, position_y, position_z, orientation_x, orientation_y, orientation_z, orientation_w)
+	except rospy.ServiceException as e:
+		print("Service call failed: %s"%e)
+	
+	# print("Position: x={}, y={}, z={}".format(position_x, position_y, position_z))
+	# print("Orientation: x={}, y={}, z={}, w={}".format(orientation_x, orientation_y, orientation_z, orientation_w))
     
 
 if __name__ == '__main__':
