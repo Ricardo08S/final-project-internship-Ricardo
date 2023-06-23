@@ -6,4 +6,4 @@
 #### https://docs.google.com/spreadsheets/d/1dkWyXI6YeiBGTh8Qd8gO9UcoxyEDSyvzmpGNrgpjoEA/edit?usp=sharing
 
 ### Link untuk flowchart
-#### [https://drive.google.com/file/d/1y8Vu0Ydwv8A0y03v5I12ezPr0AScyCnA/view?usp=sharing](https://drive.google.com/drive/folders/1KxpaNvdlDs2VmfXCgTjRbPom3viYMnc6?usp=sharing)https://drive.google.com/drive/folders/1KxpaNvdlDs2VmfXCgTjRbPom3viYMnc6?usp=sharing
+#### https://drive.google.com/drive/folders/1KxpaNvdlDs2VmfXCgTjRbPom3viYMnc6?usp=sharing
