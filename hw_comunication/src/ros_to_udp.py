@@ -63,19 +63,22 @@ def receive_motor_data():
         # motor_pub.publish(received_motor_msg)
 
 def kapal_belok_kanan():
-    return 1200150
+    return 1700150 #motor: 1700, servo: 150 derajat
 
 def kapal_belok_kiri():
-    return 120030
+    return 170030 #motor: 1700, servo: 30 derajat
 
 def kapal_maju():
-    return 150090
+    return 180088 #motor: 1800, servo 0 derajat
 
 def kapal_berhenti():
-    return 100090
+    return 150090 #motor: 1500, servo: 90 derajat
+
+def kapal_mundur():
+    return 110090 #motor: 1100, servo: 90 derajat
 
 def water_pump():
-    return 2222
+    return 2222 # perintah untuk menjalankan logika waterpump
 
 def jalankan(input):
     rate = rospy.Rate(10)
@@ -90,6 +93,8 @@ def jalankan(input):
         if input == 4:
             send_motor_data(kapal_berhenti())
         if input == 5:
+            send_motor_data(kapal_mundur())
+        if input == 6:
             send_motor_data(water_pump())
         receive_motor_data()
         
