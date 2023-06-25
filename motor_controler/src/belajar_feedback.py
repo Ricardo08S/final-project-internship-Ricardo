@@ -5,10 +5,24 @@ import unittest
 import rospy
 import math
 from geometry_msgs.msg import PoseStamped
-from mavros_msgs.msg import Altitude, ExtendedState, HomePosition, ParamValue, State, \
-                            WaypointList
-from mavros_msgs.srv import CommandBool, ParamGet, ParamSet, SetMode, SetModeRequest, WaypointClear, \
-                            WaypointPush
+from mavros_msgs.msg import (
+    Altitude,
+    ExtendedState,
+    HomePosition,
+    ParamValue,
+    State,
+    WaypointList,
+)
+from mavros_msgs.srv import (
+    CommandBool,
+    ParamGet,
+    ParamSet,
+    SetMode,
+    SetModeRequest,
+    WaypointClear,
+    WaypointPush,
+)
+
 # from pymavlink import mavutil
 from sensor_msgs.msg import NavSatFix, Imu
 from six import xrange
@@ -32,8 +46,14 @@ class MavrosTestCommon(unittest.TestCase):
         self.sub_topics_ready = {
             key: False
             for key in [
-                'alt', 'ext_state', 'global_pos', 'home_pos', 'local_pos',
-                'mission_wp', 'state', 'imu'
+                "alt",
+                "ext_state",
+                "global_pos",
+                "home_pos",
+                "local_pos",
+                "mission_wp",
+                "state",
+                "imu",
             ]
         }
 
@@ -41,47 +61,45 @@ class MavrosTestCommon(unittest.TestCase):
         service_timeout = 30
         rospy.loginfo("waiting for ROS services")
         try:
-            rospy.wait_for_service('mavros/param/get', service_timeout)
-            rospy.wait_for_service('mavros/param/set', service_timeout)
-            rospy.wait_for_service('mavros/cmd/arming', service_timeout)
-            rospy.wait_for_service('mavros/mission/push', service_timeout)
-            rospy.wait_for_service('mavros/mission/clear', service_timeout)
-            rospy.wait_for_service('mavros/set_mode', service_timeout)
+            rospy.wait_for_service("mavros/param/get", service_timeout)
+            rospy.wait_for_service("mavros/param/set", service_timeout)
+            rospy.wait_for_service("mavros/cmd/arming", service_timeout)
+            rospy.wait_for_service("mavros/mission/push", service_timeout)
+            rospy.wait_for_service("mavros/mission/clear", service_timeout)
+            rospy.wait_for_service("mavros/set_mode", service_timeout)
             rospy.loginfo("ROS services are up")
         except rospy.ROSException:
             self.fail("failed to connect to services")
-        self.get_param_srv = rospy.ServiceProxy('mavros/param/get', ParamGet)
-        self.set_param_srv = rospy.ServiceProxy('mavros/param/set', ParamSet)
-        self.set_arming_srv = rospy.ServiceProxy('mavros/cmd/arming',
-                                                 CommandBool)
-        self.set_mode_srv = rospy.ServiceProxy('mavros/set_mode', SetMode)
-        self.wp_clear_srv = rospy.ServiceProxy('mavros/mission/clear',
-                                               WaypointClear)
-        self.wp_push_srv = rospy.ServiceProxy('mavros/mission/push',
-                                              WaypointPush)
+        self.get_param_srv = rospy.ServiceProxy("mavros/param/get", ParamGet)
+        self.set_param_srv = rospy.ServiceProxy("mavros/param/set", ParamSet)
+        self.set_arming_srv = rospy.ServiceProxy("mavros/cmd/arming", CommandBool)
+        self.set_mode_srv = rospy.ServiceProxy("mavros/set_mode", SetMode)
+        self.wp_clear_srv = rospy.ServiceProxy("mavros/mission/clear", WaypointClear)
+        self.wp_push_srv = rospy.ServiceProxy("mavros/mission/push", WaypointPush)
 
         # ROS subscribers
-        self.alt_sub = rospy.Subscriber('mavros/altitude', Altitude,
-                                        self.altitude_callback)
-        self.ext_state_sub = rospy.Subscriber('mavros/extended_state',
-                                              ExtendedState,
-                                              self.extended_state_callback)
-        self.global_pos_sub = rospy.Subscriber('mavros/global_position/global',
-                                               NavSatFix,
-                                               self.global_position_callback)
-        self.imu_data_sub = rospy.Subscriber('mavros/imu/data',
-                                               Imu,
-                                               self.imu_data_callback)
-        self.home_pos_sub = rospy.Subscriber('mavros/home_position/home',
-                                             HomePosition,
-                                             self.home_position_callback)
-        self.local_pos_sub = rospy.Subscriber('mavros/local_position/pose',
-                                              PoseStamped,
-                                              self.local_position_callback)
+        self.alt_sub = rospy.Subscriber(
+            "mavros/altitude", Altitude, self.altitude_callback
+        )
+        self.ext_state_sub = rospy.Subscriber(
+            "mavros/extended_state", ExtendedState, self.extended_state_callback
+        )
+        self.global_pos_sub = rospy.Subscriber(
+            "mavros/global_position/global", NavSatFix, self.global_position_callback
+        )
+        self.imu_data_sub = rospy.Subscriber(
+            "mavros/imu/data", Imu, self.imu_data_callback
+        )
+        self.home_pos_sub = rospy.Subscriber(
+            "mavros/home_position/home", HomePosition, self.home_position_callback
+        )
+        self.local_pos_sub = rospy.Subscriber(
+            "mavros/local_position/pose", PoseStamped, self.local_position_callback
+        )
         self.mission_wp_sub = rospy.Subscriber(
-            'mavros/mission/waypoints', WaypointList, self.mission_wp_callback)
-        self.state_sub = rospy.Subscriber('mavros/state', State,
-                                          self.state_callback)
+            "mavros/mission/waypoints", WaypointList, self.mission_wp_callback
+        )
+        self.state_sub = rospy.Subscriber("mavros/state", State, self.state_callback)
 
     def tearDown(self):
         self.log_topic_vars()
@@ -93,73 +111,83 @@ class MavrosTestCommon(unittest.TestCase):
         self.altitude = data
 
         # amsl has been observed to be nan while other fields are valid
-        if not self.sub_topics_ready['alt'] and not math.isnan(data.amsl):
-            self.sub_topics_ready['alt'] = True
+        if not self.sub_topics_ready["alt"] and not math.isnan(data.amsl):
+            self.sub_topics_ready["alt"] = True
 
-    # def extended_state_callback(self, data):
-    #     if self.extended_state.vtol_state != data.vtol_state:
-    #         rospy.loginfo("VTOL state changed from {0} to {1}".format(
-    #             mavutil.mavlink.enums['MAV_VTOL_STATE']
-    #             [self.extended_state.vtol_state].name, mavutil.mavlink.enums[
-    #                 'MAV_VTOL_STATE'][data.vtol_state].name))
+        # def extended_state_callback(self, data):
+        #     if self.extended_state.vtol_state != data.vtol_state:
+        #         rospy.loginfo("VTOL state changed from {0} to {1}".format(
+        #             mavutil.mavlink.enums['MAV_VTOL_STATE']
+        #             [self.extended_state.vtol_state].name, mavutil.mavlink.enums[
+        #                 'MAV_VTOL_STATE'][data.vtol_state].name))
 
-    #     if self.extended_state.landed_state != data.landed_state:
-    #         rospy.loginfo("landed state changed from {0} to {1}".format(
-    #             mavutil.mavlink.enums['MAV_LANDED_STATE']
-    #             [self.extended_state.landed_state].name, mavutil.mavlink.enums[
-    #                 'MAV_LANDED_STATE'][data.landed_state].name))
+        #     if self.extended_state.landed_state != data.landed_state:
+        #         rospy.loginfo("landed state changed from {0} to {1}".format(
+        #             mavutil.mavlink.enums['MAV_LANDED_STATE']
+        #             [self.extended_state.landed_state].name, mavutil.mavlink.enums[
+        #                 'MAV_LANDED_STATE'][data.landed_state].name))
 
         self.extended_state = data
 
-        if not self.sub_topics_ready['ext_state']:
-            self.sub_topics_ready['ext_state'] = True
+        if not self.sub_topics_ready["ext_state"]:
+            self.sub_topics_ready["ext_state"] = True
 
     def global_position_callback(self, data):
         self.global_position = data
 
-        if not self.sub_topics_ready['global_pos']:
-            self.sub_topics_ready['global_pos'] = True
+        if not self.sub_topics_ready["global_pos"]:
+            self.sub_topics_ready["global_pos"] = True
 
     def imu_data_callback(self, data):
         self.imu_data = data
 
-        if not self.sub_topics_ready['imu']:
-            self.sub_topics_ready['imu'] = True
+        if not self.sub_topics_ready["imu"]:
+            self.sub_topics_ready["imu"] = True
 
     def home_position_callback(self, data):
         self.home_position = data
 
-        if not self.sub_topics_ready['home_pos']:
-            self.sub_topics_ready['home_pos'] = True
+        if not self.sub_topics_ready["home_pos"]:
+            self.sub_topics_ready["home_pos"] = True
 
     def local_position_callback(self, data):
         self.local_position = data
 
-        if not self.sub_topics_ready['local_pos']:
-            self.sub_topics_ready['local_pos'] = True
+        if not self.sub_topics_ready["local_pos"]:
+            self.sub_topics_ready["local_pos"] = True
 
     def mission_wp_callback(self, data):
         if self.mission_wp.current_seq != data.current_seq:
-            rospy.loginfo("current mission waypoint sequence updated: {0}".
-                          format(data.current_seq))
+            rospy.loginfo(
+                "current mission waypoint sequence updated: {0}".format(
+                    data.current_seq
+                )
+            )
 
         self.mission_wp = data
 
-        if not self.sub_topics_ready['mission_wp']:
-            self.sub_topics_ready['mission_wp'] = True
+        if not self.sub_topics_ready["mission_wp"]:
+            self.sub_topics_ready["mission_wp"] = True
 
     def state_callback(self, data):
         if self.state.armed != data.armed:
-            rospy.loginfo("armed state changed from {0} to {1}".format(
-                self.state.armed, data.armed))
+            rospy.loginfo(
+                "armed state changed from {0} to {1}".format(
+                    self.state.armed, data.armed
+                )
+            )
 
         if self.state.connected != data.connected:
-            rospy.loginfo("connected changed from {0} to {1}".format(
-                self.state.connected, data.connected))
+            rospy.loginfo(
+                "connected changed from {0} to {1}".format(
+                    self.state.connected, data.connected
+                )
+            )
 
         if self.state.mode != data.mode:
-            rospy.loginfo("mode changed from {0} to {1}".format(
-                self.state.mode, data.mode))
+            rospy.loginfo(
+                "mode changed from {0} to {1}".format(self.state.mode, data.mode)
+            )
 
         # if self.state.system_status != data.system_status:
         #     rospy.loginfo("system_status changed from {0} to {1}".format(
@@ -170,8 +198,8 @@ class MavrosTestCommon(unittest.TestCase):
         self.state = data
 
         # mavros publishes a disconnected state message on init
-        if not self.sub_topics_ready['state'] and data.connected:
-            self.sub_topics_ready['state'] = True
+        if not self.sub_topics_ready["state"] and data.connected:
+            self.sub_topics_ready["state"] = True
 
     #
     # Helper methods
@@ -309,12 +337,12 @@ class MavrosTestCommon(unittest.TestCase):
     #         except rospy.ROSException as e:
     #             self.fail(e)
 
-        # self.assertTrue(landed_state_confirmed, (
-        #     "landed state not detected | desired: {0}, current: {1} | index: {2}, timeout(seconds): {3}".
-        #     format(mavutil.mavlink.enums['MAV_LANDED_STATE'][
-        #         desired_landed_state].name, mavutil.mavlink.enums[
-        #             'MAV_LANDED_STATE'][self.extended_state.landed_state].name,
-        #            index, timeout)))
+    # self.assertTrue(landed_state_confirmed, (
+    #     "landed state not detected | desired: {0}, current: {1} | index: {2}, timeout(seconds): {3}".
+    #     format(mavutil.mavlink.enums['MAV_LANDED_STATE'][
+    #         desired_landed_state].name, mavutil.mavlink.enums[
+    #             'MAV_LANDED_STATE'][self.extended_state.landed_state].name,
+    #            index, timeout)))
 
     # def wait_for_vtol_state(self, transition, timeout, index):
     #     """Wait for VTOL transition, timeout(int): seconds"""
@@ -419,7 +447,7 @@ class MavrosTestCommon(unittest.TestCase):
         res = False
         for i in xrange(timeout * loop_freq):
             try:
-                res = self.get_param_srv('MAV_TYPE')
+                res = self.get_param_srv("MAV_TYPE")
                 if res.success:
                     self.mav_type = res.value.integer
                     # rospy.loginfo(
@@ -435,9 +463,10 @@ class MavrosTestCommon(unittest.TestCase):
             except rospy.ROSException as e:
                 self.fail(e)
 
-        self.assertTrue(res.success, (
-            "MAV_TYPE param get failed | timeout(seconds): {0}".format(timeout)
-        ))
+        self.assertTrue(
+            res.success,
+            ("MAV_TYPE param get failed | timeout(seconds): {0}".format(timeout)),
+        )
 
     def log_topic_vars(self):
         """log the state of topic variables"""
